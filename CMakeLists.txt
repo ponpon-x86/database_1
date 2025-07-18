@@ -12,6 +12,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/extern/rapidjson
 )
 
 add_subdirectory(src)
