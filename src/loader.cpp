@@ -37,6 +37,6 @@ std::string Loader::stringify(rapidjson::Value& val) const {
     return val.GetString();
 }
 
-DBData Loader::getDBData() const {
+common::DBData Loader::getDBData() const {
     return data;
 }

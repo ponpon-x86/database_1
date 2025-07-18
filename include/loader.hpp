@@ -13,12 +13,12 @@ class Loader {
     Loader();
     ~Loader() = default;
 
-    DBData getDBData() const;
+    common::DBData getDBData() const;
 
     private:
 
     void loadData();
 
-    DBData data;
+    common::DBData data;
     std::string stringify(rapidjson::Value&) const;
 };

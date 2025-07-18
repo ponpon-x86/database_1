@@ -5,6 +5,7 @@
 
 #include "manager.hpp"
 #include "worker.hpp"
+#include "employee.hpp"
 
 class App {
 
@@ -17,4 +18,6 @@ class App {
 
     std::shared_ptr<Manager> manager = std::make_shared<Manager>();
     Worker worker;
+
+    std::vector<Employee> employees;
 };
