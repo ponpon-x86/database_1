@@ -1,6 +1,7 @@
 #pragma once
 
 #include <conio.h>
+#include <cctype>
 
 #include "manager.hpp"
 #include "worker.hpp"

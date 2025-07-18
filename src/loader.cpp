@@ -1,6 +1,10 @@
 #include "loader.hpp"
 
 Loader::Loader() {
+    loadData();
+}
+
+void Loader::loadData() {
     // read file
     std::ifstream file("../../settings.json");
     if (!file.is_open()) {

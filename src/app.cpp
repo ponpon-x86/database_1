@@ -1,7 +1,13 @@
 #include "app.hpp"
 
 App::App(char* arg) {
-    auto input = atoi(arg);
+    int input;
+    std::string checker(arg);
+
+    if (checker.length() == 1 && std::isdigit(checker.front()))
+        input = atoi(arg);
+    else input = -1;
+
     switch(input) {
         case 1:
         worker.task1(manager);
