@@ -5,4 +5,3 @@ conan install . --output-folder=build --build=missing
 cmake --preset conan-default
 cmake --build --preset conan-release
 ```
-There's also an executable file at *build/Release/database_1.exe*.
