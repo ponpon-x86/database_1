@@ -13,7 +13,7 @@ class Worker {
     void task2(std::vector<Employee>, std::shared_ptr<Manager>);
     void task3(std::vector<Employee>&, std::shared_ptr<Manager>);
     void task4(std::vector<Employee>&, std::shared_ptr<Manager>);
-    void task5(std::shared_ptr<Manager>);
+    std::chrono::milliseconds task5(std::vector<Employee>&, std::shared_ptr<Manager>);
 
     private:
 };

@@ -6,6 +6,7 @@
 #include <sstream>
 #include <algorithm>
 #include <regex>
+#include <chrono>
 
 namespace common {
     struct DBData {
@@ -127,5 +128,13 @@ namespace common {
             return false;
 
         return false;
+    }
+
+    template<typename Func>
+    inline std::chrono::milliseconds measureTime(Func&& func) {
+        auto start = std::chrono::system_clock::now();
+        func();
+        auto end = std::chrono::system_clock::now();
+        return std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     }
 };

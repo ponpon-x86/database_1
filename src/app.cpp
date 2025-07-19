@@ -45,8 +45,15 @@ generator(
         break;
 
         case 5:
-        worker.task5(manager);
-        break;
+        {
+            std::chrono::milliseconds measurements;
+            std::chrono::milliseconds total_time = common::measureTime([&]() {
+                measurements = worker.task5(employees, manager);
+            });
+            std::cout << "\tTime spent on query (SQL interation): " << measurements << "\n";
+            std::cout << "\tTotal time spent (mostly printing to console): " << total_time << "\n";
+            break;
+        }
     }
 }
 
