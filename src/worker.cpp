@@ -18,7 +18,8 @@ void Worker::task1(std::shared_ptr<Manager> manager) {
 }
 
 void Worker::task2(std::shared_ptr<Manager> manager) {
-
+    std::cout << "\tFilling in data about an employee.\n";
+    
 }
 
 void Worker::task3(std::shared_ptr<Manager> manager) {

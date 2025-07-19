@@ -6,7 +6,7 @@ name(name), birth_date(birth_date), gender(gender) {
 }
 
 Employee::Employee(std::string name, std::string birth_date, std::string gender) :
-name(name), birth_date(birth_date), gender(gender) {
+name(name), birth_date(birth_date) {
     std::string t = gender;
     std::transform(t.begin(), t.end(), t.begin(),
         [](unsigned char c){ return std::tolower(c); });
@@ -21,25 +21,27 @@ name(name), birth_date(birth_date), gender(gender) {
 bool Employee::validate() {
     if (!valid_gender)
         return false;
-    if (!common::validateDate(this->birth_date))
+    if (!common::validateDate(common::getYearMonthDay(this->birth_date)))
         return false;
 }
 
 void Employee::sendToDatabase(std::shared_ptr<Manager> manager) {
     std::cout << "\tSending data of employee " << name << " (born " << birth_date <<
-    "), " << gender? "male" : "female" << " to the database.\n";
+    "), " << (this->gender? "male" : "female") << " to the database.\n";
 
     auto bday = common::getYearMonthDay(this->birth_date);
     auto date_str = 
-        std::to_string(bday<0>) + "-" +
-        std::to_string(bday<1>) + "-" +
-        std::to_string(bday<2>);
+        std::to_string(std::get<0>(bday)) + "-" +
+        std::to_string(std::get<1>(bday)) + "-" +
+        std::to_string(std::get<2>(bday));
 
     auto connection = manager->establishConnection();
 
     try {
         pqxx::work work(*connection->getConnection().get());
-        work.exec("INSERT INTO Employee VALUES (DEFAULT, '" << this->name "', '" << date_str << "', " << this->gender ")");
+        work.exec("INSERT INTO Employee VALUES (DEFAULT, '" + 
+            this->name + "', '" + date_str +
+            "', " + (this->gender? "true" : "false") + ")");
         work.commit();
     } catch (pqxx::sql_error const &e) {
         std::cout << "\tException occured.\n";
@@ -54,12 +56,12 @@ int Employee::calculateAge() {
     auto tupled_birthday_date = common::getYearMonthDay(this->birth_date);
     auto tupled_today_date = common::getTodaysDate();
 
-    if ( tupled_today_date<0> <= tupled_birthday_date<0> ) // years
+    if ( std::get<0>(tupled_today_date) <= std::get<0>(tupled_birthday_date) ) // years
         return 0;
-    auto years = tupled_today_date<0> - tupled_birthday_date<0>;
-    if ( tupled_today_date<1> > tupled_birthday_date<1> ) // months
+    auto years = std::get<0>(tupled_today_date) - std::get<0>(tupled_birthday_date);
+    if ( std::get<1>(tupled_today_date) > std::get<1>(tupled_birthday_date) ) // months
         return years;
-    if ( tupled_today_date<2> > tupled_birthday_date<2> ) // days
+    if ( std::get<2>(tupled_today_date) > std::get<2>(tupled_birthday_date) ) // days
         return years;
     return years - 1;
 }
