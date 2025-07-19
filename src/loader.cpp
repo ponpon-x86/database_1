@@ -7,11 +7,11 @@ Loader::Loader() {
 void Loader::loadData() {    
     // let's speed this up...
     std::vector<std::shared_ptr<std::thread>> threads;
-    threads.push_back(std::make_shared<std::thread>(&Loader::loadSettings, this, "../../settings.json"));
-    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "../../extern/resources/male.names", std::ref(names_m)));
-    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "../../extern/resources/female.names",  std::ref(names_f)));
-    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "../../extern/resources/sur.names",  std::ref(surnames)));
-    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "../../extern/resources/secret_sur.names",  std::ref(secret_surnames)));
+    threads.push_back(std::make_shared<std::thread>(&Loader::loadSettings, this, "settings.json"));
+    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "resources/male.names", std::ref(names_m)));
+    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "resources/female.names",  std::ref(names_f)));
+    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "resources/sur.names",  std::ref(surnames)));
+    threads.push_back(std::make_shared<std::thread>(&Loader::loadNames, this, "resources/secret_sur.names",  std::ref(secret_surnames)));
 
     for(auto& t: threads)
         t.get()->join();
