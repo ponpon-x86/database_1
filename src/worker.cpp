@@ -30,11 +30,11 @@ void Worker::task2(std::vector<Employee> employees, std::shared_ptr<Manager> man
     for (auto& t: threads) {
         t.get()->join();
     }
-    std::cout << "\tAll done.\n";
+    std::cout << "\tDone.\n";
 }
 
 void Worker::task3(std::vector<Employee>& employees, std::shared_ptr<Manager> manager) {
-    std::cout << "\tRetrieving data about every Employee...\n";
+    std::cout << "\tRetrieving data about every Employee with UNIQUE name AND birth date...\n";
     auto connection = manager->establishConnection();
     pqxx::work work(*connection->getConnection().get());
     pqxx::stream_from stream {
@@ -51,11 +51,13 @@ void Worker::task3(std::vector<Employee>& employees, std::shared_ptr<Manager> ma
     manager->closeConnection(connection);
 
     for(auto& employee: employees) {
-        std::cout << "\t" << employee.getName() << ", " << 
+        std::cout << "\t-- " << employee.getName() << ", " << 
         (employee.getGender() ? "male" : "female") << 
         " (born " << employee.getBirthDate() << 
         " / " << employee.calculateAge() << " y.o.);\n";
     }
+
+    std::cout << "\tDone.\n";
 }
 
 void Worker::task4(std::shared_ptr<Manager> manager) {
