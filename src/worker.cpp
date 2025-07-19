@@ -33,8 +33,29 @@ void Worker::task2(std::vector<Employee> employees, std::shared_ptr<Manager> man
     std::cout << "\tAll done.\n";
 }
 
-void Worker::task3(std::shared_ptr<Manager> manager) {
+void Worker::task3(std::vector<Employee>& employees, std::shared_ptr<Manager> manager) {
+    std::cout << "\tRetrieving data about every Employee...\n";
+    auto connection = manager->establishConnection();
+    pqxx::work work(*connection->getConnection().get());
+    pqxx::stream_from stream {
+        work, pqxx::from_query,
+        "SELECT e.name, e.birth_date, BOOL_OR(e.gender) \
+        FROM Employee e \
+        GROUP BY name, birth_date \
+        ORDER BY name" };
+    std::tuple<std::string, std::string, bool> row;
+    while (stream >> row) {
+        employees.push_back( { std::get<0>(row), std::get<1>(row), std::get<2>(row) } );
+    }
+    stream.complete();
+    manager->closeConnection(connection);
 
+    for(auto& employee: employees) {
+        std::cout << "\t" << employee.getName() << ", " << 
+        (employee.getGender() ? "male" : "female") << 
+        " (born " << employee.getBirthDate() << 
+        " / " << employee.calculateAge() << " y.o.);\n";
+    }
 }
 
 void Worker::task4(std::shared_ptr<Manager> manager) {

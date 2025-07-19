@@ -30,7 +30,7 @@ App::App(const std::vector<std::string>& arguments) {
         break;
 
         case 3:
-        worker.task3(manager);
+        worker.task3(employees, manager);
         break;
 
         case 4:

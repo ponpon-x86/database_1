@@ -11,7 +11,7 @@ class Worker {
 
     void task1(std::shared_ptr<Manager>);
     void task2(std::vector<Employee>, std::shared_ptr<Manager>);
-    void task3(std::shared_ptr<Manager>);
+    void task3(std::vector<Employee>&, std::shared_ptr<Manager>);
     void task4(std::shared_ptr<Manager>);
     void task5(std::shared_ptr<Manager>);
 

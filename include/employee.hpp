@@ -15,6 +15,10 @@ class Employee {
     void sendToDatabase(std::shared_ptr<Manager>);
     int calculateAge();
 
+    std::string getName() { return name; };
+    std::string getBirthDate() { return birth_date; };
+    bool getGender() { return gender; };
+
     private:
 
     std::string name;
