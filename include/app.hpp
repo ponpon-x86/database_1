@@ -11,10 +11,12 @@ class App {
 
     public:
 
-    App(char*);
+    App(const std::vector<std::string>&);
     ~App() = default;
 
     private:
+
+    std::vector<Employee> createEmployeeSubset(const std::vector<std::string>&);
 
     std::shared_ptr<Manager> manager = std::make_shared<Manager>();
     Worker worker;

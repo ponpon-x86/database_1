@@ -12,17 +12,12 @@ class Employee {
     Employee(std::string, std::string, std::string);
     ~Employee() = default;
 
-    bool validate();
     void sendToDatabase(std::shared_ptr<Manager>);
     int calculateAge();
 
     private:
 
-    bool validateGender(std::string);
-
     std::string name;
     std::string birth_date;
     bool gender;
-
-    bool valid_gender = true;
 };

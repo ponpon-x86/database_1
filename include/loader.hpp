@@ -20,5 +20,5 @@ class Loader {
     void loadData();
 
     common::DBData data;
-    std::string stringify(rapidjson::Value&) const;
+    std::string stringify(const rapidjson::Value&) const;
 };

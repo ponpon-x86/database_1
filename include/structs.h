@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <ctime>
 #include <sstream>
+#include <algorithm>
+#include <regex>
 
 namespace common {
     struct DBData {
@@ -16,18 +18,45 @@ namespace common {
 
     inline std::tuple<int, int, int> getTodaysDate() {
         auto t = std::time(nullptr);
+        #pragma warning(suppress : 4996)
         auto tm = *std::localtime(&t);
+
         return std::make_tuple(1900 + tm.tm_year, 1 + tm.tm_mon, tm.tm_mday);
     }
 
-    inline std::tuple<int, int, int> getYearMonthDay(std::string date) {
+    inline std::tuple<int, int, int> getYearMonthDay(std::string& date) {
+        // alright, so, we can validate the string format with a regex.
+        // unfortunately.
+        // this should do it:
+        std::regex pattern(R"(^(\d+)-(\d+)-(\d+)$)");
+        std::smatch matches;
+
+        if (std::regex_match(date, matches, pattern)) {
+            // so now we will just assume that if number 3 is 4 symbols wide
+            // it's the year.
+            int number1 = std::stoi(matches[1].str());
+            int number2 = std::stoi(matches[2].str());
+            int number3 = std::stoi(matches[3].str());
+            if (matches[3].str().length() == 4) {
+                date = matches[3].str() + "-" + matches[2].str() + "-" + matches[1].str();
+                return std::make_tuple(number3, number2, number1); // Y M D
+            }
+            else // else assume the date is in Y-M-D format anyway
+                return std::make_tuple(number1, number2, number3); // Y M D
+        }
+
+        // if regex did not match, the input should be invalid, so lets just...
+        return std::make_tuple(-1, -1, -1);
+
+        /*
         std::tm t = {};
         std::stringstream ss(date);
         ss >> std::get_time(&t, "%Y-%m-%d");
         return std::make_tuple(1900 + t.tm_year, 1 + t.tm_mon, t.tm_mday);
+        */
     }
 
-    inline bool validateDate(std::tuple<int, int, int> date) {
+    inline bool validateDate(const std::tuple<int, int, int>& date) {
         auto year = std::get<0>(date);
         auto month = std::get<1>(date);
         auto day = std::get<2>(date);
@@ -68,5 +97,35 @@ namespace common {
         }
 
         return true; // valid
+    }
+
+    inline bool validateGender(const std::string& gender) {
+        if (gender == "1" || gender == "0")
+            return true;
+
+        std::string t = gender;
+        std::transform(t.begin(), t.end(), t.begin(),
+            [](unsigned char c){ return std::tolower(c); });
+
+        if (t == "male" || t == "m" || t == "female" || t == "f")
+            return true;
+
+        return false;
+    }
+
+    inline bool genderStrToBool(const std::string& gender) {
+        if (gender == "1") return true;
+        if (gender == "0") return false;
+
+        std::string t = gender;
+        std::transform(t.begin(), t.end(), t.begin(),
+            [](unsigned char c){ return std::tolower(c); });
+
+        if (t == "male" || t == "m")
+            return true;
+        if (t == "female" || t == "f")
+            return false;
+
+        return false;
     }
 };

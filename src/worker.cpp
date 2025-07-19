@@ -17,9 +17,20 @@ void Worker::task1(std::shared_ptr<Manager> manager) {
     std::cout << "\tDone.\n";
 }
 
-void Worker::task2(std::shared_ptr<Manager> manager) {
-    std::cout << "\tFilling in data about an employee.\n";
-    
+void Worker::task2(std::vector<Employee> employees, std::shared_ptr<Manager> manager) {
+    std::cout << "\tFilling in data about every employee in the subset...\n";
+    std::cout << "\t(there are " << employees.size() << " employees correctly filled in)\n";
+
+    std::vector<std::shared_ptr<std::thread>> threads;
+    for (auto& employee : employees) {
+        // employee.sendToDatabase(manager);
+        threads.push_back(std::make_shared<std::thread>(std::thread(&Employee::sendToDatabase, &employee, manager)));
+    }
+
+    for (auto& t: threads) {
+        t.get()->join();
+    }
+    std::cout << "\tAll done.\n";
 }
 
 void Worker::task3(std::shared_ptr<Manager> manager) {

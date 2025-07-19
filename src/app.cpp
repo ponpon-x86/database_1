@@ -1,11 +1,19 @@
 #include "app.hpp"
 
-App::App(char* arg) {
-    int input;
-    std::string checker(arg);
+App::App(const std::vector<std::string>& arguments) {
+    // the first argument should be task number;
+    // at this point there's at least 2 of them
+    // (as confirmed by main.cpp)
+    // and we don't need the argument numero 0
 
-    if (checker.length() == 1 && std::isdigit(checker.front()))
-        input = atoi(arg);
+    // all arguments after that belong to task 2
+    // and follow the pattern: [<name> <date> <gender>]
+    int input;
+    std::string menu(arguments.at(1));
+
+    // check the validity of task number
+    if (menu.length() == 1 && std::isdigit(menu.front()))
+        input = atoi(menu.c_str());
     else input = -1;
 
     switch(input) {
@@ -14,7 +22,11 @@ App::App(char* arg) {
         break;
 
         case 2:
-        worker.task2(manager);
+        if (arguments.size() < 5) {
+            std::cout << "\tNot enough arguments to start task num.2!\n";
+            std::cout << "\tThe correct syntax is: database_1.exe 2 [name] [date] [gender] ...\n";
+        }
+        else worker.task2(createEmployeeSubset(arguments), manager);
         break;
 
         case 3:
@@ -29,4 +41,41 @@ App::App(char* arg) {
         worker.task5(manager);
         break;
     }
+}
+
+std::vector<Employee> 
+App::createEmployeeSubset(const std::vector<std::string>& arguments) {
+    // generally, we want to look through tuples
+    // of these arguments and validate them;
+    // if they are valid, form an Employee and pass
+    // to task2, else -- discard them.
+    std::vector<Employee> employees_subset;
+    for (unsigned i = 0 ; 4 + i * 3 < arguments.size() ; ++i) {
+        unsigned name_iter = 2 + i * 3; 
+        unsigned date_iter = 3 + i * 3; 
+        unsigned gender_iter = 4 + i * 3;
+
+        // since the name can be whatever, there's no point
+        // in validating it
+        std::string name = arguments.at(name_iter);
+        std::cout << "\tTrying to create employee object [" << name << "]...\n";
+        // the date, though, can be validated.
+        std::string date = arguments.at(date_iter);
+        auto date_tuple = common::getYearMonthDay(date);
+        if (!common::validateDate(date_tuple)) {
+            std::cout << "\n\t\tError gathering input data num." << i << " into new Employee object:\n";
+            std::cout << "\t\tthe input date is invalid; be sure to input date as YYYY-MM-DD OR DD-MM-YYYY.\n";
+            continue;
+        }
+        // great, now we get the gender and validate it.
+        std::string gender = arguments.at(gender_iter);
+        if (!common::validateGender(gender)) {
+            std::cout << "\n\t\tError gathering input data num." << i << " into new Employee object:\n";
+            std::cout << "\t\tthe gender is invalid. The gender can be assigned in one of the following forms:\n";
+            std::cout << "\t\tmale / m / 1 OR female / f / 0.\n";
+            continue;
+        }
+        employees_subset.push_back( { name, date, common::genderStrToBool(gender) } );
+    }
+    return employees_subset;
 }

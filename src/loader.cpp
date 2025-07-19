@@ -33,7 +33,7 @@ void Loader::loadData() {
     data.port = document["port"].GetInt();
 }
 
-std::string Loader::stringify(rapidjson::Value& val) const {
+std::string Loader::stringify(const rapidjson::Value& val) const {
     return val.GetString();
 }
 
