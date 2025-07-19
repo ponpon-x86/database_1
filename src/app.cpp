@@ -54,7 +54,7 @@ void App::switchMenu(const std::vector<std::string>& arguments) {
             std::chrono::milliseconds total_time = common::measureTime([&]() {
                 measurements = worker.task5(employees, manager);
             });
-            std::cout << "\tTime spent on query (SQL interation): " << measurements << "\n";
+            std::cout << "\tTime spent on query (SQL interaction): " << measurements << "\n";
             std::cout << "\tTotal time spent (mostly printing to console): " << total_time << "\n";
             break;
         }
@@ -64,7 +64,7 @@ void App::switchMenu(const std::vector<std::string>& arguments) {
         std::chrono::milliseconds total_time = common::measureTime([&]() {
             measurements = worker.task6(employees, manager);
         });
-        std::cout << "\tTime spent on query (SQL interation): " << measurements << "\n";
+        std::cout << "\tTime spent on query (SQL interaction): " << measurements << "\n";
         std::cout << "\tTotal time spent (creating index + mostly printing to console): " << total_time << "\n";
         break;
     }
