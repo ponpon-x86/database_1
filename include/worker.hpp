@@ -14,6 +14,7 @@ class Worker {
     void task3(std::vector<Employee>&, std::shared_ptr<Manager>);
     void task4(std::vector<Employee>&, std::shared_ptr<Manager>);
     std::chrono::milliseconds task5(std::vector<Employee>&, std::shared_ptr<Manager>);
+    std::chrono::milliseconds task6(std::vector<Employee>&, std::shared_ptr<Manager>);
 
     private:
 };

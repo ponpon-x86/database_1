@@ -5,8 +5,8 @@
 void Worker::task1(std::shared_ptr<Manager> manager) {
     std::cout << "\tCreating table (if it doesn't exist yet):\n";
     auto connection = manager->establishConnection();
+    pqxx::work work(*connection->getConnection().get());
     try {
-        pqxx::work work(*connection->getConnection().get());
         work.exec("CREATE TABLE IF NOT EXISTS Employee(id SERIAL PRIMARY KEY, name varchar, birth_date date, gender bool)");
         work.commit();
     } catch (pqxx::sql_error const &e) {
@@ -114,4 +114,19 @@ std::chrono::milliseconds Worker::task5(std::vector<Employee>& employees, std::s
 
     std::cout << "\tDone.\n";
     return std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+}
+
+std::chrono::milliseconds Worker::task6(std::vector<Employee>& employees, std::shared_ptr<Manager> manager) {
+    std::cout << "\tWill add an index...\n";
+    auto connection = manager->establishConnection();
+    pqxx::work work(*connection->getConnection().get());
+    try {
+        work.exec("CREATE INDEX IF NOT EXISTS customindex ON Employee (name text_pattern_ops, gender)");
+        work.commit();
+    } catch (pqxx::sql_error const &e) {
+        std::cout << "\tException occured.\n";
+        throw e;
+    }
+    manager->closeConnection(connection);
+    return task5(employees, manager);
 }

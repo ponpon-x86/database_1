@@ -6,6 +6,10 @@ generator(
     loader.getNamesM(), loader.getNamesF(), 
     loader.getSurnames(), loader.getSecretSurnames()
 ) {
+    switchMenu(arguments);
+}
+
+void App::switchMenu(const std::vector<std::string>& arguments) {
     // the first argument should be task number;
     // at this point there's at least 2 of them
     // (as confirmed by main.cpp)
@@ -54,6 +58,15 @@ generator(
             std::cout << "\tTotal time spent (mostly printing to console): " << total_time << "\n";
             break;
         }
+
+        case 6:
+        std::chrono::milliseconds measurements;
+        std::chrono::milliseconds total_time = common::measureTime([&]() {
+            measurements = worker.task6(employees, manager);
+        });
+        std::cout << "\tTime spent on query (SQL interation): " << measurements << "\n";
+        std::cout << "\tTotal time spent (creating index + mostly printing to console): " << total_time << "\n";
+        break;
     }
 }
 

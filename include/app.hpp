@@ -18,6 +18,7 @@ class App {
     private:
 
     std::vector<Employee> createEmployeeSubset(const std::vector<std::string>&);
+    void switchMenu(const std::vector<std::string>&);
 
     Loader loader;
     std::shared_ptr<Manager> manager;
