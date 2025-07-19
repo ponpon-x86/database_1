@@ -15,23 +15,10 @@ target_link_libraries(database_1 libpqxx::pqxx)
 
 target_include_directories(database_1 PUBLIC ../include)
 
-add_custom_command(
-    TARGET ${PROJECT_NAME}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/Release/resources
-    COMMENT "Creating resources directory after build."
-)
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/settings.json ${CMAKE_BINARY_DIR}/Release
-    COMMENT "Copying settings.json to build directory."
-)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Release/resources)
+configure_file(${CMAKE_SOURCE_DIR}/settings.json ${CMAKE_BINARY_DIR}/Release COPYONLY)
 file(GLOB files ${CMAKE_SOURCE_DIR}/extern/resources/*.names)
 foreach(file ${files})
     # message(${file})
-    add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD 
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file} ${CMAKE_BINARY_DIR}/Release/resources
-        COMMENT "Copying settings.json to build directory."
-    )
+    configure_file(${file} ${CMAKE_BINARY_DIR}/Release/resources COPYONLY)
 endforeach()
