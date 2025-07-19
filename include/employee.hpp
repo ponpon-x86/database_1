@@ -18,6 +18,8 @@ class Employee {
 
     private:
 
+    bool validateGender(std::string);
+
     std::string name;
     std::string birth_date;
     bool gender;

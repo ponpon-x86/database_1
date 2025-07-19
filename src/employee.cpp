@@ -6,16 +6,22 @@ name(name), birth_date(birth_date), gender(gender) {
 }
 
 Employee::Employee(std::string name, std::string birth_date, std::string gender) :
-name(name), birth_date(birth_date) {
-    std::string t = gender;
+name(name), birth_date(birth_date), gender(validateGender(gender)) {
+
+}
+
+bool Employee::validateGender(std::string gender_str) {
+    std::string t = gender_str;
     std::transform(t.begin(), t.end(), t.begin(),
         [](unsigned char c){ return std::tolower(c); });
 
     if (t == "male" || t == "m")
-        gender = true;
+        return true;
     else if (t == "female" || t == "f")
-        gender = false;
+        return false;
     else valid_gender = false;
+
+    return false;
 }
 
 bool Employee::validate() {
@@ -23,6 +29,7 @@ bool Employee::validate() {
         return false;
     if (!common::validateDate(common::getYearMonthDay(this->birth_date)))
         return false;
+    return true;
 }
 
 void Employee::sendToDatabase(std::shared_ptr<Manager> manager) {
