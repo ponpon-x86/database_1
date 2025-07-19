@@ -1,6 +1,11 @@
 #include "app.hpp"
 
-App::App(const std::vector<std::string>& arguments) {
+App::App(const std::vector<std::string>& arguments) :
+manager(std::make_shared<Manager>(loader.getDBData())),
+generator(
+    loader.getNamesM(), loader.getNamesF(), 
+    loader.getSurnames(), loader.getSecretSurnames()
+) {
     // the first argument should be task number;
     // at this point there's at least 2 of them
     // (as confirmed by main.cpp)
@@ -34,7 +39,9 @@ App::App(const std::vector<std::string>& arguments) {
         break;
 
         case 4:
-        worker.task4(manager);
+        for (auto i = 0; i < 1000000; ++i) employees.push_back(generator.generateEmployee());
+        for (auto i = 0; i < 100; ++i) employees.push_back(generator.generateEmployee(true));
+        worker.task4(employees, manager);
         break;
 
         case 5:

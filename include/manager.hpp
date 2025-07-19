@@ -11,7 +11,7 @@
 class Manager {
     public:
 
-    Manager();
+    Manager(const common::DBData& data);
     ~Manager() = default;
 
     std::shared_ptr<Connector> establishConnection();
@@ -21,7 +21,7 @@ class Manager {
 
     void createConnectionQueue();
 
-    Loader loader;
+    const common::DBData& data;
     std::queue<std::shared_ptr<Connector>> connectors;
 
     unsigned const threads = 4;

@@ -6,14 +6,14 @@ Constructor / Destructor
 -----------------------------
 */
 
-Manager::Manager() {
+Manager::Manager(const common::DBData& data) : data(data) {
     createConnectionQueue();
 }
 
 void Manager::createConnectionQueue() {
     std::unique_lock<std::mutex> lock(mutex);
     for(unsigned i = 0; i < threads; ++i) {
-        connectors.emplace(std::make_shared<Connector>(this->loader.getDBData()));
+        connectors.emplace(std::make_shared<Connector>(this->data));
     }
 }
 

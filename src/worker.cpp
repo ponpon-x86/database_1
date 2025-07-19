@@ -60,8 +60,25 @@ void Worker::task3(std::vector<Employee>& employees, std::shared_ptr<Manager> ma
     std::cout << "\tDone.\n";
 }
 
-void Worker::task4(std::shared_ptr<Manager> manager) {
-
+void Worker::task4(std::vector<Employee>& employees, std::shared_ptr<Manager> manager) {
+    std::cout << "\tMass insertion of generated employees...\n";
+    auto connection = manager->establishConnection();
+    pqxx::work work(*connection->getConnection().get());
+    try {
+        auto stream = pqxx::stream_to::table(
+            work,
+            { "employee" },
+            {"name", "birth_date", "gender"} );
+        for (auto &employee: employees)
+            stream << std::make_tuple(employee.getName(), employee.getBirthDate(), employee.getGender());
+        stream.complete();
+    } catch (pqxx::sql_error const &e) {
+        std::cout << "\tException occured: " << e.what() << "\n";
+        throw e;
+    }
+    work.commit();
+    manager->closeConnection(connection);
+    std::cout << "\tDone.\n";
 }
 
 void Worker::task5(std::shared_ptr<Manager> manager) {

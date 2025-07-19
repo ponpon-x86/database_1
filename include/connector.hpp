@@ -11,7 +11,7 @@
 class Connector {
     public:
 
-    Connector(common::DBData);
+    Connector(const common::DBData&);
     ~Connector() = default;
     std::shared_ptr<pqxx::connection> getConnection();
 

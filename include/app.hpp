@@ -6,6 +6,7 @@
 #include "manager.hpp"
 #include "worker.hpp"
 #include "employee.hpp"
+#include "generator.hpp"
 
 class App {
 
@@ -18,8 +19,10 @@ class App {
 
     std::vector<Employee> createEmployeeSubset(const std::vector<std::string>&);
 
-    std::shared_ptr<Manager> manager = std::make_shared<Manager>();
+    Loader loader;
+    std::shared_ptr<Manager> manager;
     Worker worker;
+    Generator generator;
 
     std::vector<Employee> employees;
 };
